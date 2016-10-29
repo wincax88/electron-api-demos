@@ -5,6 +5,8 @@ const autoUpdater = require('./auto-updater')
 
 const BrowserWindow = electron.BrowserWindow
 const app = electron.app
+const ipc = require('electron').ipcMain
+const shell = electron.shell
 
 const debug = /--debug/.test(process.argv[2])
 
@@ -37,7 +39,6 @@ function initialize () {
     if (debug) {
       mainWindow.webContents.openDevTools()
       mainWindow.maximize()
-      require('devtron').install()
     }
 
     mainWindow.on('closed', function () {
@@ -48,6 +49,14 @@ function initialize () {
   app.on('ready', function () {
     createWindow()
     autoUpdater.initialize()
+
+    ipc.on('minimize-main-window', function (event, arg) {
+      mainWindow.minimize()
+      event.returnValue = true
+    })
+    ipc.on('minimize-restore-window', function (event, arg) {
+      mainWindow.restore()
+    })
   })
 
   app.on('window-all-closed', function () {
