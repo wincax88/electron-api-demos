@@ -7,6 +7,8 @@ const electronScreen = electron.screen
 const fs = require('fs')
 const os = require('os')
 const path = require('path')
+const {clipboard} = require('electron')
+const nativeImage = require('electron').nativeImage
 
 newWindowBtn.addEventListener('click', function (event) {
   // minimize main window
@@ -33,20 +35,30 @@ newWindowBtn.addEventListener('click', function (event) {
 })
 
 function createWindow (screenshotPath) {
-  const modalPath = path.join('file://', __dirname, '../../sections/windows/modal.html')
+  const modalPath = path.join('file://', __dirname, '../../sections/windows/modal.html?image=',screenshotPath)
   let win = new BrowserWindow({ frame: false,  fullscreen : true, transparent: true})
-  win.on('close', function () {
+  win.on('close', function (event) {
+    console.log(event);
+    //window.cropBoxData
     // restore main window
-    ipc.send('minimize-restore-window')
+    ipc.send('restore-main-window')
      win = null
+
+     var dataURL = clipboard.readText()
+     //console.log(dataURL);
+     var image = nativeImage.createFromDataURL(dataURL)
+     clipboard.writeImage(image)
+
    })
+   /*
    win.on('show', function () {
      console.log('modal show');
-     const style = `{"src":"url('file://${screenshotPath}')"}`
+     //const style = `{"src":"url('file://${screenshotPath}')"}`
+     const style = `{"src":"file://${screenshotPath}"}`
      console.log(style);
      //const screenshot = document.getElementById('screenshot')
      $('screenshot').css(style);
-   })
+   })*/
 
   win.loadURL(modalPath)
   win.show()

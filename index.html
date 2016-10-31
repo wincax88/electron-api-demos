@@ -99,7 +99,11 @@
   </nav>
 
   <main class="content js-content"></main>
-
+  <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+  <script type='text/javascript' src='http://cdn.bootcss.com/jquery/3.1.1/jquery.min.js'></script>
+  <link  href="./script/cropper.min.css" rel="stylesheet">
+  <script type='text/javascript' src='./script/cropper.min.js'></script>
+  <script type='text/javascript' src='./script/clipboard.min.js'></script>
   <script>
     require('./assets/imports')
     require('./assets/ex-links')

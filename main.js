@@ -54,7 +54,7 @@ function initialize () {
       mainWindow.minimize()
       event.returnValue = true
     })
-    ipc.on('minimize-restore-window', function (event, arg) {
+    ipc.on('restore-main-window', function (event, arg) {
       mainWindow.restore()
     })
   })
